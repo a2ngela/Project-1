@@ -21,6 +21,8 @@ coffee <- read.csv('Project1_coffee.csv')
 
 ------------------------------------------------------------------------
 
+hello!!!!
+
 # **Introduction**
 
 The **Project1_coffee.csv** dataset shows data for different coffee producers and contains the following variables:

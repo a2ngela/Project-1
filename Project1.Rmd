@@ -1,0 +1,102 @@
+---
+title: "Project 1"
+author: "Angela Zhao"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(fig.height=5, fig.width=6, warning=FALSE, tidy=TRUE, tidy.opts=list(width.cutoff=60))
+```
+
+```{r echo=FALSE}
+#load libraries and import dataset
+library(ggplot2)
+library(kableExtra)
+library(RColorBrewer)
+coffee <- read.csv('Project1_coffee.csv')
+```
+
+------------------------------------------------------------------------
+
+# **Introduction**
+
+The **Project1_coffee.csv** dataset shows data for different coffee producers and contains the following variables:
+
+* *Country*
+* *RegionDetail*: Where the coffee beans were grown
+* *Altitude*: Altitude of the farm the coffee beans were grown on 
+* *Year*: Production Year 
+* *ProcessingMethod*: How the coffee beans were processed
+* *BeanColor*
+* *BagsProduced*: How many bags of coffee were produced 
+* *Rating*: Professional rating (from 0-100) of different coffee producers
+
+Sources: [Coffee Quality Database](https://github.com/jldbc/coffee-quality-database), retrieved from [here](https://corgis-edu.github.io/corgis/csv/coffee/).
+
+My chosen outcome is *BagsProduced*. The predictors I will be investigating are *Year*, *Rating*, and *Altitude*.   
+
+![](https://paramountcoffee.com/pub/media/weltpixel/owlcarouselslider/images/b/a/banner3_1.jpg)
+Source: “Paramount Coffee - Roasting the Finest Coffee: Paramount Coffee.” Paramount Coffee - Roasting the Finest Coffee | Paramount Coffee, paramountcoffee.com/?SID=d48dc2581bd5cf8482e280c1ba4724ee. Accessed 19 Sept. 2023. 
+
+------------------------------------------------------------------------
+
+# **Outcome Variable Distribution** 
+### Bags Produced
+
+```{r echo = FALSE,results='hide'}
+#Graph for distribution of outcome variable 
+ggplot(coffee, aes(x=BagsProduced,na.rm=TRUE)) + geom_histogram(col='black',fill='tan4',bins=45) + theme_classic() + labs(title='Distribution of Bags of Coffee Produced',x='Bags Produced')
+```
+
+*This graph shows the distribution of bags of coffee produced.*   
+The five number summary is `r round(fivenum(coffee$BagsProduced),2)` (min,Q1,med,Q2,max). The average number of bags produced is `r round(mean(coffee$BagsProduced),2)` bags. Half of the coffee produced was between 29 and 275 bags. 
+
+
+------------------------------------------------------------------------
+
+# **Bivariate Relationships** 
+
+### Year
+
+```{r echo=FALSE}
+#Graph comparing year and bags produced
+coffee$Year <- as.factor(coffee$Year)
+ggplot(coffee, aes(x=BagsProduced,fill=Year)) + geom_histogram(position='identity',bins=45,col='black') + theme_classic() + labs(title='Bags of Coffee Produced by Year',x='Bags Produced') + scale_fill_brewer(type='seq',palette='Set3')
+#Table showing bivariate stats 
+kbl(aggregate(BagsProduced~Year,x=coffee,FUN=median),col.names=c("Year","Bags Produced Median"),caption="Median Bags of Coffee produced by Region") %>%
+  kable_styling()
+```
+
+*This graph shows the distribution of bags of coffee produced sorted by the year they were produced. The table shows the median number of bags of coffee produced by the production year.*    
+The year with the highest median number of bags produced is 2017. There were also lots of bags produced in 2013-2015, and the least median number of bags produced was in 2017 and 2011. 
+
+
+### Rating
+
+```{r echo=FALSE, results='hide'}
+#Graph comparing rating and bags produced
+ggplot(coffee,aes(x=Rating,y=BagsProduced)) + geom_point(col='tan4') + labs(title='Relationship Between Rating and Bags of Coffee Produced',y='Bags Produced') + theme_classic()
+```
+
+*This graph shows the relationship between the rating of a coffee producer and the number of bags produced.*  
+There is a correlation of `r round(cor(coffee$Rating,coffee$BagsProduced),2)` between rating and number of bags of coffee produced. This indicates that there is very little correlation between the two variables. There might be a slight positive relationship where the number of bags produced increases when the rating is higher, but it is not a strong enough correlation to be considered significant. 
+
+
+### Altitude
+```{r echo=FALSE, results='hide'}
+#Graph comparing rating and bags produced
+ggplot(coffee,aes(x=Altitude,y=BagsProduced)) + geom_point(col='tan4') + labs(title='Relationship Between Altitude and Bags of Coffee Produced',y='Bags Produced') + theme_classic()
+```
+
+*This graph shows the relationship between the altitude a coffee bean was grown at and the number of bags produced.*  
+There is a correlation of `r round(cor(coffee$BagsProduced,coffee$Altitude),2)` between altitude and number of bags of coffee produced. This indicates that there is no correlation between the two variables. However, looking solely at the graph, it looks like the points at the higher altitudes have less bags produced, and the coffee with the most bags produced are at lower altitudes. 
+
+------------------------------------------------------------------------
+
+# **Conclusion**
+The data I found shows that there is no significant relationship between bags of coffee produced and year, altitude, and rating. There are some trends I was able to spot, but the data did not provide strong enough evidence to show any significant relationship. In order to find more connections in the data, further research would need to be done. One way this could be done is by collecting data over a longer period of time so that there will be noticeable trends within the data. There could also be more variables included in the research, such as the climate of the area that the beans are grown. 
+
+> References: https://github.com/jldbc/coffee-quality-database, https://corgis-edu.github.io/corgis/csv/coffee/
